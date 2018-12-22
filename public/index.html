@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1">
+	<title>Icon Battles</title>
+	<link rel="stylesheet"
+		href="./assets/vendor.css">
+	<link rel="stylesheet"
+		href="./assets/app.css">
+</head>
+<body ng-controller="controller as ctrl">
+	<div>
+		History:
+	</div>
+	<span ng-repeat="symbol in ctrl.symbol_history track by $index"
+		class="ra"
+		ng-class="symbol"></span>
+
+	<div>
+		Spells:
+	</div>
+	<button ng-repeat="symbol in ctrl.all_symbols"
+		ng-click="ctrl.send(symbol)">
+		<span class="ra" ng-class="symbol"></span>
+	</button>
+
+	<script src="./socket.io/socket.io.js"></script>
+	<script src="./assets/vendor.js"></script>
+	<script src="./assets/app.js"></script>
+
+</body>
+</html>
