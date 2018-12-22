@@ -1,7 +1,7 @@
 /**
  * adds or subtracts hp and/or mp to/from the target. Return true iff any change was made.
  */
-apply(effect, target){
+function apply(effect, target){
 	var any_updated = false;
 
 	if (effect.hp && effect.hp != 0){
@@ -20,7 +20,7 @@ apply(effect, target){
 /**
  * Returns true iff the target can afford the cost in HP and MP.
  */
-check(cost, target){
+function check(cost, target){
 	if (cost.hp && player.hp <= cost.hp){
 		return false;
 	}

@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 
 
 angular
 	.module('app', [])
@@ -11,7 +10,7 @@ angular
 			player_symbol: null,
 			spell_symbol: null,
 			target_symbol: null,
-			
+
 			cooldowns: {},
 			status: {},
 		};
