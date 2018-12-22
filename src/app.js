@@ -1,13 +1,16 @@
 import angular from 'angular';
 
-
 angular
 	.module('app', [])
 	.controller('controller', ['$scope', function($scope){
 		let ctrl = this;
 		ctrl.$scope = $scope;
 		ctrl.socket = io();
-		ctrl.all_symbols = [
+
+		ctrl.current = {
+			symbol: 'ra-beetle'
+		};
+		ctrl.player_symbols = [
 			'ra-beetle',
 			'ra-bird-claw',
 			'ra-butterfly',
@@ -45,15 +48,8 @@ angular
 			'ra-wolf-head',
 			'ra-wolf-howl',
 		];
-		ctrl.symbol_history = [];
 
-		ctrl.send = function(symbol){
-			ctrl.socket.emit('message', symbol);
-			ctrl.symbol_history.push(symbol);
+		ctrl.change_player = function(new_symbol){
+			ctrl.current.symbol = new_symbol;
 		};
-
-		ctrl.socket.on('message', function(symbol){
-			ctrl.symbol_history.push(symbol);
-			ctrl.$scope.$apply();
-		});
 	}]);

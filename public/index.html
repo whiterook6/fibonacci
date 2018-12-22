@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
+
 	<meta charset="utf-8">
 	<meta name="viewport"
 		content="width=device-width, initial-scale=1">
@@ -9,22 +10,41 @@
 		href="./assets/vendor.css">
 	<link rel="stylesheet"
 		href="./assets/app.css">
+
 </head>
 <body ng-controller="controller as ctrl">
-	<div>
-		History:
-	</div>
-	<span ng-repeat="symbol in ctrl.symbol_history track by $index"
-		class="ra"
-		ng-class="symbol"></span>
 
-	<div>
-		Spells:
+	<nav class="navbar is-link has-shadow" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<span class="navbar-item">
+				<span class="ra ra-fairy-wand"></span> Spell Slingers
+			</span>
+		</div>
+	</nav>
+
+	<div class="columns is-gapless">
+		<aside class="column">
+			<div class="menu section">
+				<h1 class="menu-label">Players</h1>
+				<ul class="menu-list">
+					<li ng-repeat="symbol in ctrl.player_symbols">
+						<a ng-class="{ 'is-active': ctrl.current.symbol == symbol }"
+							ng-click="ctrl.change_player(symbol)">
+							<span class="ra" ng-class="symbol"></span>
+							<span ng-if="ctrl.current.symbol == symbol">You</span>
+							<span ng-if="ctrl.current.symbol != symbol"
+								ng-bind="symbol"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</aside>
+
+		<div class="column is-10">
+
+		</div>
 	</div>
-	<button ng-repeat="symbol in ctrl.all_symbols"
-		ng-click="ctrl.send(symbol)">
-		<span class="ra" ng-class="symbol"></span>
-	</button>
+
 
 	<script src="./socket.io/socket.io.js"></script>
 	<script src="./assets/vendor.js"></script>

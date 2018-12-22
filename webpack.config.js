@@ -9,7 +9,7 @@ module.exports = {
 			'./src/app.scss',
 		],
 		vendor: [
-			'bulma/css/bulma.css',
+			'angular',
 			'rpg-awesome/css/rpg-awesome.min.css'
 		]
 	},
