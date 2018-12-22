@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 
 
 angular
 	.module('app', [])
@@ -6,50 +7,53 @@ angular
 		let ctrl = this;
 		ctrl.$scope = $scope;
 		ctrl.socket = io();
-
 		ctrl.current = {
-			symbol: 'ra-beetle'
+			player_symbol: null,
+			spell_symbol: null,
+			target_symbol: null,
+			
+			cooldowns: {},
+			status: {},
 		};
-		ctrl.player_symbols = [
-			'ra-beetle',
-			'ra-bird-claw',
-			'ra-butterfly',
-			'ra-cat',
-			'ra-dinosaur',
-			'ra-dragon',
-			'ra-dragonfly',
-			'ra-eye-monster',
-			'ra-fairy',
-			'ra-fish',
-			'ra-fox',
-			'ra-gecko',
-			'ra-hydra',
-			'ra-insect-jaws',
-			'ra-lion',
-			'ra-love-howl',
-			'ra-maggot',
-			'ra-octopus',
-			'ra-rabbit',
-			'ra-raven',
-			'ra-sea-serpent',
-			'ra-seagull',
-			'ra-shark',
-			'ra-sheep',
-			'ra-snail',
-			'ra-snake',
-			'ra-spider-face',
-			'ra-spiked-tentacle',
-			'ra-spiral-shell',
-			'ra-suckered-tentacle',
-			'ra-tentacle',
-			'ra-two-dragons',
-			'ra-venomous-snake',
-			'ra-wyvern',
-			'ra-wolf-head',
-			'ra-wolf-howl',
-		];
+		
+		ctrl.get_status = function(){
+			ctrl.socket.emit('get-status');
+		};
+
+		ctrl.get_cooldowns = function(){
+			ctrl.socket.emit('get-cooldowns');
+		};
 
 		ctrl.change_player = function(new_symbol){
-			ctrl.current.symbol = new_symbol;
+			if (ctrl.current_symbol != new_symbol){
+				ctrl.socket.emit('change-symbol', new_symbol);
+			}
 		};
+
+		ctrl.choose_spell = function(symbol){
+			ctrl.current.spell = symbol;
+		};
+
+		ctrl.choose_target = function(symbol){
+			ctrl.current.target = symbol;
+		};
+
+		ctrl.cast = function(){
+			ctrl.socket.emit('cast-spell', {
+				target_symbol: ctrl.current.target_symbol || null,
+				spell_symbol: ctrl.current.spell_symbol,
+			});
+		};
+
+		ctrl.socket.on('change-symbol', function(symbol){
+			ctrl.current.player_symbol = symbol;
+		});
+
+		ctrl.socket.on('update', function(status){
+			ctrl.current.status = status;
+		});
+
+		ctrl.socket.on('current-cooldowns', function(cooldowns){
+			ctrl.current.cooldowns = cooldowns;
+		})
 	}]);

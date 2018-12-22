@@ -14,36 +14,7 @@
 </head>
 <body ng-controller="controller as ctrl">
 
-	<nav class="navbar is-link has-shadow" role="navigation" aria-label="main navigation">
-		<div class="navbar-brand">
-			<span class="navbar-item">
-				<span class="ra ra-fairy-wand"></span> Spell Slingers
-			</span>
-		</div>
-	</nav>
-
-	<div class="columns is-gapless">
-		<aside class="column">
-			<div class="menu section">
-				<h1 class="menu-label">Players</h1>
-				<ul class="menu-list">
-					<li ng-repeat="symbol in ctrl.player_symbols">
-						<a ng-class="{ 'is-active': ctrl.current.symbol == symbol }"
-							ng-click="ctrl.change_player(symbol)">
-							<span class="ra" ng-class="symbol"></span>
-							<span ng-if="ctrl.current.symbol == symbol">You</span>
-							<span ng-if="ctrl.current.symbol != symbol"
-								ng-bind="symbol"></span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</aside>
-
-		<div class="column is-10">
-
-		</div>
-	</div>
+	
 
 
 	<script src="./socket.io/socket.io.js"></script>

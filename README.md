@@ -21,3 +21,33 @@ This is a test to get websockets working with a simple game. It's also a chance 
 
 Get socket-io working, so users can pass font icons back and forth.
 - basically an icon-only chat history.
+
+Done.
+
+## Step 2
+
+Game planning, basics:
+- players
+- spells
+- HP
+
+player:
+	symbol
+	name
+	hp
+	available_spells: [
+    	symbol
+    	name
+    	description
+    	effect	
+	]
+
+game:
+	players
+	history: [
+		id =>
+			symbol
+			source
+			target
+			timestamp
+	]
