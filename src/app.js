@@ -2,57 +2,50 @@ import angular from 'angular';
 
 angular
 	.module('app', [])
-	.controller('controller', ['$scope', function($scope){
+	.controller('controller', ['$scope', '$interval', function($scope, $interval){
 		let ctrl = this;
 		ctrl.$scope = $scope;
-		ctrl.socket = io();
-		ctrl.current = {
-			player_symbol: null,
-			spell_symbol: null,
-			target_symbol: null,
+		ctrl.$interval = $interval;
 
-			cooldowns: {},
-			status: {},
-		};
-		
-		ctrl.get_status = function(){
-			ctrl.socket.emit('get-status');
-		};
+		ctrl.spells = [{
+			color: 'red',
+			symbol: 'ra-bottle-vapors',
+			cooldown: 1000,
+		}, {
+			color: 'orange',
+			symbol: 'ra-key',
+			cooldown: 2500,
+		}, {
+			color: 'yellow',
+			symbol: 'ra-arrow-cluster',
+			cooldown: 5000,
+		}, {
+			color: 'blue',
+			symbol: 'ra-diamond',
+			cooldown: 10000,
+		}, {
+			color: 'purple',
+			symbol: 'ra-dervish-swords',
+			cooldown: 20000,
+		}];
 
-		ctrl.get_cooldowns = function(){
-			ctrl.socket.emit('get-cooldowns');
-		};
-
-		ctrl.change_player = function(new_symbol){
-			if (ctrl.current_symbol != new_symbol){
-				ctrl.socket.emit('change-symbol', new_symbol);
+		ctrl.click = function(spell){
+			var now = Date.now();
+			if (spell.interval){
+				return;
 			}
+
+			spell.last_cast = now;
+			spell.expected_expiry = (spell.last_cast + spell.cooldown);
+
+			spell.interval = ctrl.$interval(() => {
+				var now = Date.now();
+				if (now >= spell.expected_expiry){
+					ctrl.$interval.cancel(spell.interval);
+					spell.interval = null;
+				} else {
+					spell.cooldown_percentage = ((spell.expected_expiry - now)/spell.cooldown) * 100;
+				}
+			}, 10);
 		};
-
-		ctrl.choose_spell = function(symbol){
-			ctrl.current.spell = symbol;
-		};
-
-		ctrl.choose_target = function(symbol){
-			ctrl.current.target = symbol;
-		};
-
-		ctrl.cast = function(){
-			ctrl.socket.emit('cast-spell', {
-				target_symbol: ctrl.current.target_symbol || null,
-				spell_symbol: ctrl.current.spell_symbol,
-			});
-		};
-
-		ctrl.socket.on('change-symbol', function(symbol){
-			ctrl.current.player_symbol = symbol;
-		});
-
-		ctrl.socket.on('update', function(status){
-			ctrl.current.status = status;
-		});
-
-		ctrl.socket.on('current-cooldowns', function(cooldowns){
-			ctrl.current.cooldowns = cooldowns;
-		})
 	}]);

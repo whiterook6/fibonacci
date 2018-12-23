@@ -17,21 +17,7 @@
 
 	<div class="player">
 		<div class="effects">
-			<div class="icon spell red">
-				<span class="ra ra-bottle-vapors"></span>
-			</div>
-			<div class="icon spell orange">
-				<span class="ra ra-key"></span>
-			</div>
-			<div class="icon spell yellow">
-				<span class="ra ra-arrow-cluster"></span>
-			</div>
-			<div class="icon spell blue">
-				<span class="ra ra-diamond"></span>
-			</div>
-			<div class="icon spell purple">
-				<span class="ra ra-dervish-swords"></span>
-			</div>
+			
 		</div>
 		<div class="avatar">
 			<div class="icon-2x spell green">
@@ -45,62 +31,21 @@
 			</div>
 		</div>
 		<div class="spells">
-			<div class="icon spell blue">
-				<span class="ra ra-diamond"></span>
-				<div class="cooldown" style="height: 50%"></div>
-			</div>
-			<div class="icon spell purple">
-				<span class="ra ra-dervish-swords"></span>
-			</div>
-			<div class="icon spell red">
-				<span class="ra ra-bottle-vapors"></span>
-				<div class="cooldown" style="height: 95%"></div>
-			</div>
-			<div class="icon spell orange">
-				<span class="ra ra-key"></span>
-				<div class="cooldown" style="height: 10%"></div>
-			</div>
-			<div class="icon spell yellow">
-				<span class="ra ra-arrow-cluster"></span>
+			<div ng-repeat="spell in ctrl.spells"
+				ng-class="spell.color"
+				ng-click="ctrl.click(spell)"
+				class="icon spell">
+				<span class="ra"
+					ng-class="spell.symbol"></span>
+				<div class="cooldown"
+					ng-if="spell.cooldown > 0"
+					ng-style="{height: spell.cooldown_percentage + '%'}"></div>
 			</div>
 		</div>
 	</div>
 	
-	<div class="player">
-		<div class="effects">
-			<div class="icon spell yellow">
-				<span class="ra ra-arrow-cluster"></span>
-			</div>
-			<div class="icon spell blue">
-				<span class="ra ra-diamond"></span>
-			</div>
-			<div class="icon spell purple">
-				<span class="ra ra-dervish-swords"></span>
-			</div>
-		</div>
-		<div class="avatar">
-			<div class="icon-2x spell green">
-				<span class="ra ra-heavy-shield"></span>
-			</div>
-			<div class="bar red">
-				<div class="complete" style="width: 10%"></div>
-			</div>
-			<div class="bar blue">
-				<div class="complete" style="width: 15%"></div>
-			</div>
-		</div>
-		<div class="spells">
-			<div class="icon spell blue">
-				<span class="ra ra-diamond"></span>
-				<div class="cooldown" style="height: 50%"></div>
-			</div>
-			<div class="icon spell purple">
-				<span class="ra ra-dervish-swords"></span>
-			</div>
-		</div>
-	</div>
 	<!-- <script src="./socket.io/socket.io.js"></script> -->
-	<!-- <script src="./assets/vendor.js"></script> -->
-	<!-- <script src="./assets/app.js"></script> -->
+	<script src="./assets/vendor.js"></script>
+	<script src="./assets/app.js"></script>
 </body>
 </html>
