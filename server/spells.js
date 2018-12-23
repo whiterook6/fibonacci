@@ -1,6 +1,6 @@
 var Spell = require('./spell');
 var spell_data = [{
-	symbol: 'ra-dripping-sword',
+	symbol: 'dripping-sword',
 	cooldown: 5000,
 	cost: {
 		mp: 10
@@ -15,7 +15,7 @@ var spell_data = [{
 	},
 	color: '#c0392b'
 }, {
-	symbol: 'ra-heart-bottle',
+	symbol: 'heart-bottle',
 	cooldown: 3000,
 	cost: {
 		mp: 10
@@ -28,7 +28,7 @@ var spell_data = [{
 	},
 	color: '#e74c3c'
 }, {
-	symbol: 'ra-burning-meteor',
+	symbol: 'burning-meteor',
 	cooldown: 20000,
 	cost: {
 		mp: 50
@@ -43,7 +43,7 @@ var spell_data = [{
 	},
 	color: '#6F1E51'
 }, {
-	symbol: 'ra-bottle-vapors',
+	symbol: 'bottle-vapors',
 	cooldown: 10000,
 	effects: {
 		self: {

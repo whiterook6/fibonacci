@@ -1,25 +1,59 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html>
 <head>
 
 	<meta charset="utf-8">
 	<meta name="viewport"
 		content="width=device-width, initial-scale=1">
-	<title>Icon Battles</title>
+	<title>Spell Slingers</title>
 	<link rel="stylesheet"
 		href="./assets/vendor.css">
 	<link rel="stylesheet"
 		href="./assets/app.css">
 
 </head>
-<body ng-controller="controller as ctrl">
+<body ng-app="app"
+	ng-controller="controller as ctrl">
 
+	<div class="player">
+		<div class="effects">
+			<div class="icon spell red">
+				<span class="ra ra-bottle-vapors"></span>
+			</div>
+			<div class="icon spell orange">
+				<span class="ra ra-key"></span>
+			</div>
+			<div class="icon spell yellow">
+				<span class="ra ra-arrow-cluster"></span>
+			</div>
+			<div class="icon spell red">
+				<span class="ra ra-bottle-vapors"></span>
+			</div>
+			<div class="icon spell orange">
+				<span class="ra ra-key"></span>
+			</div>
+			<div class="icon spell yellow">
+				<span class="ra ra-arrow-cluster"></span>
+			</div>
+		</div>
+		<div class="avatar">
+			<div class="icon-2x spell green">
+				<span class="ra ra-heavy-shield"></span>
+			</div>
+		</div>
+		<div class="spells">
+			<div class="icon spell blue">
+				<span class="ra ra-diamond"></span>
+			</div>
+			<div class="icon spell purple">
+				<span class="ra ra-dervish-swords"></span>
+			</div>
+		</div>
+	</div>
 	
 
-
-	<script src="./socket.io/socket.io.js"></script>
-	<script src="./assets/vendor.js"></script>
-	<script src="./assets/app.js"></script>
-
+	<!-- <script src="./socket.io/socket.io.js"></script> -->
+	<!-- <script src="./assets/vendor.js"></script> -->
+	<!-- <script src="./assets/app.js"></script> -->
 </body>
 </html>

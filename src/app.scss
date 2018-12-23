@@ -1,0 +1,103 @@
+@import "_variables";
+
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	 -webkit-box-sizing: border-box; 
+	-moz-box-sizing: border-box; 
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	-webkit-box-sizing: inherit;
+	-moz-box-sizing: inherit;
+	box-sizing: inherit;
+}
+
+
+$icon-size: 32px;
+$border-radius: 3px;
+$border-size: 2px;
+
+.player {
+	display: flex;
+
+	.effects, .spells {
+		flex-grow: 1;
+		display: flex;
+		flex-wrap: wrap;
+		max-width: 5 * $icon-size + 12px;
+		padding: 1px;
+
+		.icon {
+			margin: 1px;
+		}
+	}
+
+	.effects {
+		justify-content: flex-end;
+	}
+
+	.avatar {
+		padding: 2px 0;
+	}
+}
+
+.icon {
+	border-radius: $border-radius;
+	font-size: $icon-size - 2 * $border-size;
+	height: $icon-size;
+	line-height: $icon-size;
+	text-align: center;
+	width: $icon-size;
+}
+
+.icon-2x {
+	$size: 2 * $icon-size + 2px;
+	border-radius: 2 * $border-radius;
+	font-size: $size - 2 * $border-size;
+	height: $size;
+	line-height: $size;
+	text-align: center;
+	width: $size;
+}
+
+.spell {
+	display: inline-block;
+	color: white;
+	border: 2px solid;
+
+	&.red {
+		background-color: $red;
+		border-color: $red;
+	}
+
+	&.blue {
+		background-color: $blue;
+		border-color: $blue;
+	}
+
+	&.green {
+		background-color: $green;
+		border-color: $green;
+	}
+
+	&.yellow {
+		background-color: $yellow;
+		border-color: $yellow;
+	}
+
+	&.orange {
+		background-color: $orange;
+		border-color: $orange;
+	}
+
+	&.purple {
+		border-color: $purple;
+		background-color: $purple;
+	}
+}

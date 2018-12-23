@@ -10,8 +10,8 @@ var Spell = require('./spell');
 
 console.log('Loading data...');
 var spells = require('./spells');
-var available_player_symbols = require('./player_symbols');
 var all_player_symbols = require('./player_symbols');
+var available_player_symbols = all_player_symbols.slice();
 var players = {};
 
 io.on('connection', function(socket){
@@ -19,6 +19,7 @@ io.on('connection', function(socket){
 	socket.player = new Player(socket);
 
 	socket.on('change-symbol', function(symbol){
+
 		var player = socket.player;
 		if (player.symbol && player.symbol == symbol){
 			return;
@@ -26,6 +27,8 @@ io.on('connection', function(socket){
 
 		var index = available_player_symbols.indexOf(symbol);
 		if (index != -1){
+
+			// return the old symbol for others to use
 			if (player.symbol){
 				available_player_symbols.push(player.symbol);
 			}
