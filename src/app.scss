@@ -18,8 +18,7 @@ html {
 	box-sizing: inherit;
 }
 
-
-$icon-size: 32px;
+$icon-size: 48px;
 $border-radius: 3px;
 $border-size: 2px;
 
@@ -30,8 +29,8 @@ $border-size: 2px;
 		flex-grow: 1;
 		display: flex;
 		flex-wrap: wrap;
-		max-width: 5 * $icon-size + 12px;
-		padding: 1px;
+		max-width: 5 * ($icon-size + 2px);
+		align-content: flex-start;
 
 		.icon {
 			margin: 1px;
@@ -43,11 +42,42 @@ $border-size: 2px;
 	}
 
 	.avatar {
-		padding: 2px 0;
+		.icon-2x {
+			margin: 1px;
+		}
+	}
+
+	.bar {
+		height: 2 * $border-radius + 2 * $border-size;
+		border: $border-size solid;
+		border-radius: $border-radius;
+		background-color: white;
+		margin: 1px 0;
+
+		.complete {
+			height: 100%;
+		}
+		
+		&.red {
+			border-color: $red;
+
+			.complete {
+				background-color: $red;
+			}
+		}
+
+		&.blue {
+			border-color: $blue;
+
+			.complete {
+				background-color: $blue;
+			}
+		}
 	}
 }
 
 .icon {
+	position: relative;
 	border-radius: $border-radius;
 	font-size: $icon-size - 2 * $border-size;
 	height: $icon-size;
@@ -70,34 +100,74 @@ $border-size: 2px;
 	display: inline-block;
 	color: white;
 	border: 2px solid;
+	cursor: pointer;
+
+	.cooldown {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		opacity: 0.5;
+		background-color: black;
+	}
 
 	&.red {
 		background-color: $red;
 		border-color: $red;
+
+		&:hover {
+			background-color: white;
+			color: $red;
+		}
 	}
 
 	&.blue {
 		background-color: $blue;
 		border-color: $blue;
+
+		&:hover {
+			background-color: white;
+			color: $blue;
+		}
 	}
 
 	&.green {
 		background-color: $green;
 		border-color: $green;
+
+		&:hover {
+			background-color: white;
+			color: $green;
+		}
 	}
 
 	&.yellow {
 		background-color: $yellow;
 		border-color: $yellow;
+
+		&:hover {
+			background-color: white;
+			color: $yellow;
+		}
 	}
 
 	&.orange {
 		background-color: $orange;
 		border-color: $orange;
+
+		&:hover {
+			background-color: white;
+			color: $orange;
+		}
 	}
 
 	&.purple {
 		border-color: $purple;
 		background-color: $purple;
+
+		&:hover {
+			background-color: white;
+			color: $purple;
+		}
 	}
 }
