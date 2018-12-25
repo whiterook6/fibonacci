@@ -6,11 +6,25 @@ angular
 		let ctrl = this;
 		ctrl.$scope = $scope;
 		ctrl.$interval = $interval;
+		ctrl.player = {
+			symbol: 'ra-dragon',
+			hp: {
+				current: 100,
+				max: 100,
+			},
+			mp: {
+				current: 100,
+				max: 100
+			}
+		};
 
 		ctrl.spells = [{
 			color: 'red',
 			symbol: 'ra-bottle-vapors',
 			cooldown: 1000,
+			effect: function(){
+				ctrl.player.hp.current = Math.min(10 + ctrl.player.hp.current, ctrl.player.hp.max);
+			}
 		}, {
 			color: 'orange',
 			symbol: 'ra-key',
@@ -27,6 +41,10 @@ angular
 			color: 'purple',
 			symbol: 'ra-dervish-swords',
 			cooldown: 20000,
+			effect: function(){
+				console.log('clicking');
+				ctrl.player.mp.current = Math.max(ctrl.player.mp.current - 50, 0);
+			}
 		}];
 
 		ctrl.click = function(spell){
@@ -37,6 +55,7 @@ angular
 
 			spell.last_cast = now;
 			spell.expected_expiry = (spell.last_cast + spell.cooldown);
+			spell.effect();
 
 			spell.interval = ctrl.$interval(() => {
 				var now = Date.now();
@@ -46,6 +65,6 @@ angular
 				} else {
 					spell.cooldown_percentage = ((spell.expected_expiry - now)/spell.cooldown) * 100;
 				}
-			}, 10);
+			}, 20);
 		};
 	}]);
