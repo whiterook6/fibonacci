@@ -15,21 +15,15 @@
 <body ng-app="app"
 	ng-controller="controller as ctrl">
 
-	<div class="player">
+	<div class="player"
+		ng-if="ctrl.player">
 		<div class="effects">
-			<div ng-repeat="effect in ctrl.effects"
-				ng-class="effect.color"
-				class="icon effect">
-				<span class="ra"
-					ng-class="effect.symbol"></span>
-				<div class="cooldown"
-					ng-if="effect.cooldown > 0"
-					ng-style="{height: spell.cooldown_percentage + '%'}"></div>
-			</div>
+
 		</div>
 		<div class="avatar">
 			<div class="icon-2x spell green">
-				<span class="ra ra-heavy-shield"></span>
+				<span class="ra"
+					ng-class="ctrl.player.symbol"></span>
 			</div>
 			<div class="bar red">
 				<div class="complete" ng-style="{width: (ctrl.player.hp.current * 100 / ctrl.player.mp.max) + '%'}"></div>
@@ -52,7 +46,7 @@
 		</div>
 	</div>
 	
-	<!-- <script src="./socket.io/socket.io.js"></script> -->
+	<script src="./socket.io/socket.io.js"></script>
 	<script src="./assets/vendor.js"></script>
 	<script src="./assets/app.js"></script>
 </body>
