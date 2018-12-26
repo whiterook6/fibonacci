@@ -1,53 +1,73 @@
-# Icon Battle
+# Documentation
 
-This is a test to get websockets working with a simple game. It's also a chance to make a simple game.
+## Socket IO protocol
 
-# Ideas
+Definitions:
 
-- Players cast spells using icons.
-- Spells have effects such as
-	- healing;
-	- damaging others;
-	- gaining power; and
-	- casting another spell.
-- Use websockets and node to power it.
-- Timers determine cooldowns for spells.
-- Players have HP and MP.
-- If players loses all their MP or HP they lose.
+- `self`: the client sending/receiving the message (ra-dragon in this example)
+- `server`: the server receiving/sending the message
+- `target`: another client (ra-beetle in this example)
+- `others`: all other clients
+- `clients`: all clients
 
-# Plan
+### List of Socket IO Routes
 
-## Step 1
+`players.add` tell others about new player
+{
+	'ra-beetle': {
+		symbol: ra-beetle,
+		hp: {
+			current: 100,
+			max: 100
+		},
+		mp: {
+			current: 50,
+			max: 50
+		}
+	}
+}
 
-Get socket-io working, so users can pass font icons back and forth.
-- basically an icon-only chat history.
+`player.update` tell others about update to player, keyed by (old) symbol name
+{
+	'ra-beetle': {
+		hp: {
+			current: 50,
+			max: 100
+		},
+	}
+}
 
-Done.
+`player.leave` tell others about player leaving, keyed by (old) symbol name
+{
+	'ra-beetle': null
+}
 
-## Step 2
+`self.update` tell server that you want to change something, like symbol name
+{
+	symbol: 'ra-beetle'
+}
 
-Game planning, basics:
-- players
-- spells
-- HP
+`self.update` tell client that self is updated, possibly after being hit by a spell
+{
+	hp: {
+		current: 50,
+		max: 75
+	},
+	symbol: 'ra-beetle'
+}
 
-player:
-	symbol
-	name
-	hp
-	available_spells: [
-    	symbol
-    	name
-    	description
-    	effect	
-	]
+`spell.cast` tell server that you want to cast a spell.
+{
+	symbol: 'ra-potion',
+	target: 'ra-beetle' // null if no target
+}
 
-game:
-	players
-	history: [
-		id =>
-			symbol
-			source
-			target
-			timestamp
-	]
+`spell.cast` tell self, target, others, clients that a spell has been cast by a player
+{
+	symbol: 'ra-potion',
+	source: 'ra-dragon',
+	target: 'ra-beetle' // null if no target
+}
+
+
+
