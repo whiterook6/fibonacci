@@ -12,10 +12,11 @@ Definitions:
 
 ### List of Socket IO Routes
 
-`players.add` tell others about new player
+`players.add` tell others about new player(s)
 {
 	'ra-beetle': {
 		symbol: ra-beetle,
+		color: '#ccc',
 		hp: {
 			current: 100,
 			max: 100

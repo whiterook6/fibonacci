@@ -1,10 +1,11 @@
 class Spell {
 	constructor(data){
-		this.symbol = data.symbol;
-		this.cooldown = data.cooldown || 0; // in milliseconds
-		this.cost = data.cost || {};
-		this.effects = data.effects || {};
-		this.color = data.color || '#2c3e50';
+		this.cooldown = 0; // in milliseconds
+		this.cost = {};
+		this.effects = {};
+		this.color = '#2c3e50';
+
+		this.fill(data);
 	}
 
 	apply(player){
@@ -93,8 +94,25 @@ class Spell {
 			}
 		}
 
-		return true;
+		return affected;
+	}
+
+	fill(data){
+		for (var i = Spell.$fillable.length - 1; i >= 0; i--) {
+			var key = Spell.$fillable[i];
+			if (data.hasOwnProperty(key)){
+				this[key] = data[key];
+			}
+		}
 	}
 }
+
+Spell.$fillable = [
+	'symbol',
+	'cooldown',
+	'cost',
+	'effects',
+	'color'
+];
 
 module.exports = Spell;

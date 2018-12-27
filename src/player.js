@@ -1,9 +1,5 @@
-function get_percentage(current, max){
-	return ((current * 100) / max) + '%';
-}
-
 class Player {
-	constructor(symbol){
+	constructor(data){
 		this.stats = {
 			hp: {
 				current: 100,
@@ -14,23 +10,28 @@ class Player {
 				max: 100
 			}
 		};
-		this.symbol = symbol || null;
 
+		this.symbol = null;
 		this.expected_expiries = {};
 		this.spells = {};
+
+		this.fill(data);
 	}
 
-	get_status(){
+	get_data(){
 		return {
-			hp: this.stats.hp.current,
-			hp_percentage: get_percentage(this.stats.hp.current, this.stats.hp.max),
-			mp: this.stats.mp.current,
-			mp_percentage: get_percentage(this.stats.mp.current, this.stats.mp.max),
+			stats: this.stats,
+			symbol: this.symbol
 		};
 	}
 
-	get_symbol(){
-		return this.symbol;
+	fill(data){
+		for (var i = Player.fillable.length - 1; i >= 0; i--) {
+			var key = Player.fillable[i];
+			if (data.hasOwnProperty(key)){
+				this[key] = data[key];
+			}
+		}
 	}
 
 	heal(additional_hp){
@@ -74,5 +75,11 @@ class Player {
 		return true;
 	}
 }
+
+Player.fillable = [
+	'symbol',
+	'color',
+	'stats',
+]
 
 module.exports = Player;
