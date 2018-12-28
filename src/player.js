@@ -32,6 +32,8 @@ class Player {
 				this[key] = data[key];
 			}
 		}
+
+		return this;
 	}
 
 	heal(additional_hp){
@@ -42,17 +44,17 @@ class Player {
 			),
 			0
 		);
-		return this.stats.hp.current;
+
+		return this;
 	}
 
 	learn_spell(spell){
-		if (expected_expiries.hasOwnProperty(spell.symbol)){
-			return false;
+		if (!expected_expiries.hasOwnProperty(spell.symbol)){
+			this.spells[spell.symbol] = spell;
+			this.expected_expiries[spell.symbol] = Date.now();
 		}
 
-		this.spells[spell.symbol] = spell;
-		this.expected_expiries[spell.symbol] = Date.now();
-		return true;
+		return this;
 	}
 
 	recharge(additional_mp){
@@ -63,16 +65,16 @@ class Player {
 			),
 			0
 		);
-		return this.stats.mp.current;
+
+		return this;
 	}
 
 	set_symbol(symbol){
-		if (!symbol){
-			return false;
+		if (symbol){
+			this.symbol = symbol;
 		}
 
-		this.symbol = symbol;
-		return true;
+		return this;
 	}
 }
 

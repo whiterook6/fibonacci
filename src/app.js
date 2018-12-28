@@ -10,6 +10,7 @@ angular
 		ctrl.$scope = $scope;
 		ctrl.$interval = $interval;
 		ctrl.spells = spells;
+		console.log(ctrl.spells);
 		ctrl.players = {};
 		ctrl.player = null;
 

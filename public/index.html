@@ -13,13 +13,11 @@
 
 </head>
 <body ng-app="app"
+	ng-cloak
 	ng-controller="controller as ctrl">
 
 	<div class="player"
 		ng-if="ctrl.player">
-		<div class="effects">
-
-		</div>
 		<div class="avatar">
 			<div class="icon-2x spell green">
 				<span class="ra"
@@ -33,7 +31,7 @@
 			</div>
 		</div>
 		<div class="spells">
-			<div ng-repeat="spell in ctrl.spells"
+			<div ng-repeat="(symbol, spell) in ctrl.spells"
 				ng-class="spell.color"
 				ng-click="ctrl.click(spell)"
 				class="icon spell">
@@ -49,7 +47,7 @@
 		ng-if="player.symbol != ctrl.player.symbol"
 		ng-repeat="player in ctrl.players">
 		<div class="avatar">
-			<div class="icon-2x spell green">
+			<div class="icon spell green">
 				<span class="ra"
 					ng-class="player.symbol"></span>
 			</div>

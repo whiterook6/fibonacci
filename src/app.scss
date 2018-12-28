@@ -18,6 +18,10 @@ html {
 	box-sizing: inherit;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 $icon-size: 48px;
 $border-radius: 3px;
 $border-size: 2px;
