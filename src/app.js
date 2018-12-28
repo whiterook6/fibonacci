@@ -42,13 +42,9 @@ angular
 			ctrl.$scope.$apply();
 		});
 
-		ctrl.socket.on('players.leave', (message) => {
-			for (let symbol in message){
-				if (message.hasOwnProperty(symbol)){
-					if (ctrl.knows_player(symbol)){
-						ctrl.forget_player(symbol);
-					}
-				}
+		ctrl.socket.on('players.leave', (symbol) => {
+			if (ctrl.knows_player(symbol)){
+				ctrl.forget_player(symbol);
 			}
 			ctrl.$scope.$apply();
 		});

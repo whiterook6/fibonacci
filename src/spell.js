@@ -88,7 +88,7 @@ class Spell {
 				// on all others who aren't the target
 				if (others.hasOwnPropety(symbol) && symbol != target_symbol){
 					var other = others[symbol];
-					apply(others_effects, other);
+					this.apply(others_effects, other);
 					affected.push(other);
 				}
 			}
