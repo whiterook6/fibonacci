@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var protocols = require('./protocols');
 
 console.log('Loading models...');
 var Player = require('./player');
@@ -15,37 +16,25 @@ var available_player_symbols = all_player_symbols.slice();
 var players = {};
 
 function pop_random_symbol(symbols){
-	var index = Math.floor(Math.random() * symbols.length);
-	var symbol = symbols[index];
+	let index = Math.floor(Math.random() * symbols.length);
+	let symbol = symbols[index];
 	symbols.splice(index, 1);
 	return symbol;
 }
 
 function add_new_player(data, socket){
-	var player = new Player(data);
+	let player = new Player(data);
 	players[player.symbol] = player;
-	socket.player = player;
-	player.socket = socket;
 
-	var payload = {
-		[player.symbol]: player.get_data()
-	};
-	socket.broadcast.emit('players.add', payload);
-
-	payload[player.symbol].is_you = true;
-	for (var symbol in players){
-		if (players.hasOwnProperty(symbol) && symbol != player.symbol){
-			var p = players[symbol];
-			payload[symbol] = p.get_data();
-		}
-	}
-
-	socket.emit('players.add', payload);
+	// send socket-io messages to alert other players and introduce this player
+	protocols.players.add(socket, player, players);
 	
-	for (var symbol in spells){
+	for (let symbol in spells){
 		if (spells.hasOwnProperty(symbol)){
-			socket.emit('spells.learn', symbol);
-			player.learn_spell(spells[symbol]);
+			let spell = spells[symbol];
+
+			protocols.spells.teach(socket, spell);
+			player.learn_spell(spell);
 		}
 	}
 
@@ -60,26 +49,24 @@ io.on('connection', function(socket){
 		return;
 	}
 
-	var player = add_new_player({
-		symbol: pop_random_symbol(available_player_symbols)
-	}, socket);
+	let symbol = pop_random_symbol(available_player_symbols);
+	let player = add_new_player({symbol: symbol}, socket);
 
 	socket.on('spells.cast', (symbol) => {
 		if (!spells.hasOwnProperty(symbol)){
 			return false;
 		}
 
-		var spell = spells[symbol];
+		let spell = spells[symbol];
 		if (!spell.can_cast(socket.player)){
 			return false;
 		}
 
-		var affected = spell.cast(socket.player, null, players);
+		let affected = spell.cast(socket.player, null, players);
 		if (affected.length > 0){
-			var payload = {};
-			for (var i = affected.length - 1; i >= 0; i--) {
-				var affected_player = affected[i];
-				console.log(JSON.stringify(affected_player.stats));
+			let payload = {};
+			for (let i = affected.length - 1; i >= 0; i--) {
+				let affected_player = affected[i];
 				payload[affected_player.symbol] = affected_player.get_data();
 			}
 
@@ -88,13 +75,11 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('disconnect', () => {
-		var symbol = player.symbol;
+		let symbol = socket.player.symbol;
 		available_player_symbols.push(symbol);
-		io.emit('players.leave', symbol);
-
 		delete players[symbol];
-		delete socket.player;
-		delete player.socket;
+
+		protocols.players.remove(socket);
 	});
 });
 

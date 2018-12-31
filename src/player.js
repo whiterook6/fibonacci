@@ -18,6 +18,8 @@ class Player {
 		this.fill(data);
 	}
 
+	// adds whatever data is passed into the model, filtering by the $fillable
+	// array (see below).
 	fill(data){
 		for (var i = Player.$fillable.length - 1; i >= 0; i--) {
 			var key = Player.$fillable[i];
@@ -29,6 +31,7 @@ class Player {
 		return this;
 	}
 
+	// creates a packet suitable for sending by socket.
 	get_data(){
 		return {
 			stats: this.stats,
@@ -36,6 +39,8 @@ class Player {
 		};
 	}
 
+	// adds (or subtracts, for negative numbers) a given amount of HP, respecting the minimum
+	// and maximum limits.
 	heal(additional_hp){
 		this.stats.hp.current = Math.max(
 			Math.min(
@@ -48,15 +53,25 @@ class Player {
 		return this;
 	}
 
+	// returns true if the player knows this spell, false otherwise.
+	knows_spell(spell){
+		return this.spells.hasOwnProperty(spell.symbol);
+	}
+
+	// teaches the spell to this player, if he/she doesn't already know it.
 	learn_spell(spell){
-		if (!this.spells.hasOwnProperty(spell.symbol)){
-			this.expected_expiries[spell.symbol] = Date.now();
-			this.spells[spell.symbol] = spell;
+		let symbol = spell.symbol;
+
+		if (!this.knows_spell(symbol)){
+			this.expected_expiries[symbol] = Date.now();
+			this.spells[symbol] = spell;
 		}
 
 		return this;
 	}
 
+	// adds (or subtracts, for negative numbers) a given amount of MP, respecting the minimum
+	// and maximum limits.
 	recharge(additional_mp){
 		this.stats.mp.current = Math.max(
 			Math.min(
@@ -68,20 +83,13 @@ class Player {
 
 		return this;
 	}
-
-	set_symbol(symbol){
-		if (symbol){
-			this.symbol = symbol;
-		}
-
-		return this;
-	}
 }
 
+// used to filter what data can be set on the player.
 Player.$fillable = [
 	'symbol',
 	'color',
 	'stats',
-]
+];
 
 module.exports = Player;

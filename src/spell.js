@@ -104,6 +104,8 @@ class Spell {
 				this[key] = data[key];
 			}
 		}
+
+		return this;
 	}
 }
 

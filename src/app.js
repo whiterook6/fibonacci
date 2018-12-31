@@ -37,7 +37,7 @@ angular
 						console.log('adding player');
 						ctrl.add_player(symbol, data);
 					} else {
-						console.log('updateing player');
+						console.log('updating player');
 						var player = ctrl.players[symbol];
 						ctrl.update_player(player, data);
 					}
@@ -63,8 +63,12 @@ angular
 				return;
 			}
 
-			ctrl.player.learn_spell(ctrl.spells[symbol]);
-			ctrl.$scope.$apply();
+			let spell = ctrl.spells[symbol];
+
+			if (!ctrl.player.knows_spell(spell)){
+				ctrl.player.learn_spell(spell);
+				ctrl.$scope.$apply();
+			}
 		});
 
 		ctrl.knows_player = (symbol) => {
