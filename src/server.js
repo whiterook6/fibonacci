@@ -25,6 +25,7 @@ function add_new_player(data, socket){
 	var player = new Player(data);
 	players[player.symbol] = player;
 	socket.player = player;
+	player.socket = socket;
 
 	var payload = {
 		[player.symbol]: player.get_data()
@@ -40,6 +41,14 @@ function add_new_player(data, socket){
 	}
 
 	socket.emit('players.add', payload);
+	
+	for (var symbol in spells){
+		if (spells.hasOwnProperty(symbol)){
+			socket.emit('spells.learn', symbol);
+			player.learn_spell(spells[symbol]);
+		}
+	}
+
 	return player;
 }
 
@@ -55,6 +64,29 @@ io.on('connection', function(socket){
 		symbol: pop_random_symbol(available_player_symbols)
 	}, socket);
 
+	socket.on('spells.cast', (symbol) => {
+		if (!spells.hasOwnProperty(symbol)){
+			return false;
+		}
+
+		var spell = spells[symbol];
+		if (!spell.can_cast(socket.player)){
+			return false;
+		}
+
+		var affected = spell.cast(socket.player, null, players);
+		if (affected.length > 0){
+			var payload = {};
+			for (var i = affected.length - 1; i >= 0; i--) {
+				var affected_player = affected[i];
+				console.log(JSON.stringify(affected_player.stats));
+				payload[affected_player.symbol] = affected_player.get_data();
+			}
+
+			io.emit('players.update', payload);
+		}
+	});
+
 	socket.on('disconnect', () => {
 		var symbol = player.symbol;
 		available_player_symbols.push(symbol);
@@ -62,6 +94,7 @@ io.on('connection', function(socket){
 
 		delete players[symbol];
 		delete socket.player;
+		delete player.socket;
 	});
 });
 

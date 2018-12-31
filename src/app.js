@@ -10,7 +10,6 @@ angular
 		ctrl.$scope = $scope;
 		ctrl.$interval = $interval;
 		ctrl.spells = spells;
-		console.log(ctrl.spells);
 		ctrl.players = {};
 		ctrl.player = null;
 
@@ -29,14 +28,23 @@ angular
 		});
 
 		ctrl.socket.on('players.update', (message) => {
+			console.log(message);
 			for (let symbol in message){
 				if (message.hasOwnProperty(symbol)){
 					let data = message[symbol];
 
 					if (!ctrl.knows_player(symbol)){
+						console.log('adding player');
 						ctrl.add_player(symbol, data);
 					} else {
-						ctrl.update_player(symbol, data);
+						console.log('updateing player');
+						var player = ctrl.players[symbol];
+						ctrl.update_player(player, data);
+					}
+
+					if (ctrl.player.symbol == symbol){
+						console.log('updating core player');
+						ctrl.update_player(ctrl.player, data);
 					}
 				}
 			}
@@ -50,6 +58,15 @@ angular
 			ctrl.$scope.$apply();
 		});
 
+		ctrl.socket.on('spells.learn', (symbol) => {
+			if (!ctrl.spells.hasOwnProperty(symbol)){
+				return;
+			}
+
+			ctrl.player.learn_spell(ctrl.spells[symbol]);
+			ctrl.$scope.$apply();
+		});
+
 		ctrl.knows_player = (symbol) => {
 			return ctrl.players.hasOwnProperty(symbol);
 		};
@@ -58,15 +75,19 @@ angular
 			delete ctrl.players[symbol];
 		};
 
-		ctrl.update_player = (symbol, data) => {
-			for (let key in data){
-				if ((data.hasOwnProperty(key)) && (Player.fillable.indexOf(key) != -1)){
-					ctrl.players[symbol][key] = data[key];
-				}
-			}
+		ctrl.update_player = (player, data) => {
+			player.fill(data);
 		};
 
 		ctrl.add_player = (symbol, data) => {
 			ctrl.players[symbol] = new Player(data);
+		};
+
+		ctrl.cast_spell = (spell) => {
+			if (!spell.can_cast(ctrl.player)){
+				return;
+			}
+
+			ctrl.socket.emit('spells.cast', spell.symbol);
 		};
 	}]);

@@ -24,16 +24,16 @@
 					ng-class="ctrl.player.symbol"></span>
 			</div>
 			<div class="bar red">
-				<div class="complete" ng-style="{width: (ctrl.player.hp.current * 100 / ctrl.player.mp.max) + '%'}"></div>
+				<div class="complete" ng-style="{width: (ctrl.player.stats.hp.current * 100 / ctrl.player.stats.hp.max) + '%'}"></div>
 			</div>
 			<div class="bar blue">
-				<div class="complete" ng-style="{width: (ctrl.player.mp.current * 100 / ctrl.player.mp.max) + '%'}"></div>
+				<div class="complete" ng-style="{width: (ctrl.player.stats.mp.current * 100 / ctrl.player.stats.mp.max) + '%'}"></div>
 			</div>
 		</div>
 		<div class="spells">
-			<div ng-repeat="(symbol, spell) in ctrl.spells"
+			<div ng-repeat="(symbol, spell) in ctrl.player.spells"
 				ng-class="spell.color"
-				ng-click="ctrl.click(spell)"
+				ng-click="ctrl.cast_spell(spell)"
 				class="icon spell">
 				<span class="ra"
 					ng-class="spell.symbol"></span>
@@ -50,6 +50,12 @@
 			<div class="icon spell green">
 				<span class="ra"
 					ng-class="player.symbol"></span>
+			</div>
+			<div class="bar red">
+				<div class="complete" ng-style="{width: (player.stats.hp.current * 100 / player.stats.hp.max) + '%'}"></div>
+			</div>
+			<div class="bar blue">
+				<div class="complete" ng-style="{width: (player.stats.mp.current * 100 / player.stats.mp.max) + '%'}"></div>
 			</div>
 		</div>
 	</div>

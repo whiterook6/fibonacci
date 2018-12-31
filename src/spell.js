@@ -8,19 +8,20 @@ class Spell {
 		this.fill(data);
 	}
 
-	apply(player){
+	apply(effects, player){
 		var any_updated = false;
 
-		if (this.effect.hp){
-			player.heal(this.effect.hp);
+		if (effects.hp){
+			player.heal(effects.hp);
+			console.log('healing for '+effects.hp);
 			any_updated = true;
 		}
 		
-		if (this.effect.mp){
-			player.recharge(this.effect.mp)
+		if (effects.mp){
+			player.recharge(effects.mp);
+			console.log('recharging for '+effects.mp);
 			any_updated = true;
 		}
-	
 		return any_updated;
 	}
 
@@ -37,15 +38,18 @@ class Spell {
 	}
 
 	can_cast(player){
-		if (!player.expected_expiries.hasOwnPropety(this.symbol)){
+		if (!player.expected_expiries.hasOwnProperty(this.symbol)){
+			console.log('Cannot cast: symbol missing');
 			return false;
 		}
 
-		if (player.expected_expiries[symbol] > Date.now()){
+		if (player.expected_expiries[this.symbol] > Date.now()){
+			console.log('Cannot cast: symbol expired');
 			return false;
 		}
 
 		if (!this.can_afford(this.cost, player)){
+			console.log('Cannot cast: cannot afford');
 			return false;
 		}
 
@@ -53,10 +57,6 @@ class Spell {
 	}
 
 	cast(player, target, others){
-		if (!this.can_cast(player)){ // this check includes cooldown.
-			return false;
-		}
-
 		var target_symbol = null;
 		if (target){
 			target_symbol = target.get_symbol();
@@ -64,7 +64,7 @@ class Spell {
 
 		// update the cooldown. This means the spell cannot be cast again until the cooldown expires.
 		player.expected_expiries[this.symbol] = this.cooldown + Date.now();
-		affected = [];
+		var affected = [];
 
 		// if the spell affects the player, perform that effect.
 		if (this.effects.player){
@@ -86,7 +86,7 @@ class Spell {
 			for (var symbol in others){
 
 				// on all others who aren't the target
-				if (others.hasOwnPropety(symbol) && symbol != target_symbol){
+				if (others.hasOwnProperty(symbol) && symbol != target_symbol){
 					var other = others[symbol];
 					this.apply(others_effects, other);
 					affected.push(other);

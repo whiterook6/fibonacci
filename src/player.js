@@ -12,10 +12,21 @@ class Player {
 		};
 
 		this.symbol = null;
-		this.expected_expiries = {};
 		this.spells = {};
+		this.expected_expiries = {};
 
 		this.fill(data);
+	}
+
+	fill(data){
+		for (var i = Player.$fillable.length - 1; i >= 0; i--) {
+			var key = Player.$fillable[i];
+			if (data.hasOwnProperty(key)){
+				this[key] = data[key];
+			}
+		}
+
+		return this;
 	}
 
 	get_data(){
@@ -23,17 +34,6 @@ class Player {
 			stats: this.stats,
 			symbol: this.symbol
 		};
-	}
-
-	fill(data){
-		for (var i = Player.fillable.length - 1; i >= 0; i--) {
-			var key = Player.fillable[i];
-			if (data.hasOwnProperty(key)){
-				this[key] = data[key];
-			}
-		}
-
-		return this;
 	}
 
 	heal(additional_hp){
@@ -49,9 +49,9 @@ class Player {
 	}
 
 	learn_spell(spell){
-		if (!expected_expiries.hasOwnProperty(spell.symbol)){
-			this.spells[spell.symbol] = spell;
+		if (!this.spells.hasOwnProperty(spell.symbol)){
 			this.expected_expiries[spell.symbol] = Date.now();
+			this.spells[spell.symbol] = spell;
 		}
 
 		return this;
@@ -78,7 +78,7 @@ class Player {
 	}
 }
 
-Player.fillable = [
+Player.$fillable = [
 	'symbol',
 	'color',
 	'stats',
