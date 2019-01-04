@@ -9,6 +9,8 @@ angular
 		let ctrl = this;
 		ctrl.$scope = $scope;
 		ctrl.$interval = $interval;
+		ctrl.cooldowns = {};
+		ctrl.intervals = {};
 		ctrl.spells = spells;
 		ctrl.players = {};
 		ctrl.player = null;
@@ -28,7 +30,6 @@ angular
 		});
 
 		ctrl.socket.on('players.update', (message) => {
-			console.log(message);
 			for (let symbol in message){
 				if (message.hasOwnProperty(symbol)){
 					let data = message[symbol];
@@ -58,6 +59,14 @@ angular
 			ctrl.$scope.$apply();
 		});
 
+		ctrl.socket.on('players.only', (symbols) => {
+			ctrl.players.forEach((player) => {
+				if (symbols.indexOf(player.symbol) == -1){
+					ctrl.forget_player(player.symbol);
+				}
+			});
+		});
+
 		ctrl.socket.on('spells.learn', (symbol) => {
 			if (!ctrl.spells.hasOwnProperty(symbol)){
 				return;
@@ -69,6 +78,29 @@ angular
 				ctrl.player.learn_spell(spell);
 				ctrl.$scope.$apply();
 			}
+		});
+
+		ctrl.socket.on('spells.cooldown', (message) => {
+			if (!ctrl.spells.hasOwnProperty(message.symbol)){
+				return;
+			}
+
+			let spell = ctrl.spells[message.symbol];
+			ctrl.player.set_expected_expiry(spell, Date.now() + message.cooldown);
+			ctrl.cooldowns[spell.symbol] = 100;
+
+			ctrl.intervals[spell.symbol] = ctrl.$interval(() => {
+				let now = Date.now(),
+					remaining = Math.max(0, ctrl.player.get_expected_expiry(spell) - now),
+					percentage = (remaining * 100) / (spell.cooldown);
+
+				ctrl.cooldowns[spell.symbol] = percentage;
+
+				if (remaining <= 0){
+					ctrl.$interval.cancel(ctrl.intervals[spell.symbol]);
+					delete ctrl.intervals[spell.symbol];
+				}
+			}, 20);
 		});
 
 		ctrl.knows_player = (symbol) => {

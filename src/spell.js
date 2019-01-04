@@ -13,13 +13,11 @@ class Spell {
 
 		if (effects.hp){
 			player.heal(effects.hp);
-			console.log('healing for '+effects.hp);
 			any_updated = true;
 		}
 		
 		if (effects.mp){
 			player.recharge(effects.mp);
-			console.log('recharging for '+effects.mp);
 			any_updated = true;
 		}
 		return any_updated;
@@ -38,12 +36,12 @@ class Spell {
 	}
 
 	can_cast(player){
-		if (!player.expected_expiries.hasOwnProperty(this.symbol)){
+		if (!player.knows_spell(this)){
 			console.log('Cannot cast: symbol missing');
 			return false;
 		}
 
-		if (player.expected_expiries[this.symbol] > Date.now()){
+		if (player.get_expected_expiry(this) > Date.now()){
 			console.log('Cannot cast: symbol expired');
 			return false;
 		}
@@ -63,18 +61,18 @@ class Spell {
 		}
 
 		// update the cooldown. This means the spell cannot be cast again until the cooldown expires.
-		player.expected_expiries[this.symbol] = this.cooldown + Date.now();
+		player.set_expected_expiry(this, this.cooldown + Date.now());
 		var affected = [];
 
 		// if the spell affects the player, perform that effect.
-		if (this.effects.player){
-			apply(this.effects.player, player);
+		if (this.effects.self){
+			this.apply(this.effects.self, player);
 			affected.push(player);
 		}
 
 		// if this spell affects a target and the target isn't null, perform the target effect.
 		if (this.effects.target && target){
-			apply(this.effects.target, target);
+			this.apply(this.effects.target, target);
 			affected.push(target);
 		}
 

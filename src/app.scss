@@ -115,63 +115,72 @@ $border-size: 2px;
 		background-color: black;
 	}
 
-	&.red {
-		background-color: $red;
-		border-color: $red;
-
-		&:hover {
-			background-color: white;
-			color: $red;
-		}
+	&.disabled {
+		background-color: gray;
+		color: white;
+		border-color: gray;
 	}
 
-	&.blue {
-		background-color: $blue;
-		border-color: $blue;
+	&:not(.disabled){
 
-		&:hover {
-			background-color: white;
-			color: $blue;
+		&.red {
+			background-color: $red;
+			border-color: $red;
+
+			&:hover {
+				background-color: white;
+				color: $red;
+			}
 		}
-	}
 
-	&.green {
-		background-color: $green;
-		border-color: $green;
+		&.blue {
+			background-color: $blue;
+			border-color: $blue;
 
-		&:hover {
-			background-color: white;
-			color: $green;
+			&:hover {
+				background-color: white;
+				color: $blue;
+			}
 		}
-	}
 
-	&.yellow {
-		background-color: $yellow;
-		border-color: $yellow;
+		&.green {
+			background-color: $green;
+			border-color: $green;
 
-		&:hover {
-			background-color: white;
-			color: $yellow;
+			&:hover {
+				background-color: white;
+				color: $green;
+			}
 		}
-	}
 
-	&.orange {
-		background-color: $orange;
-		border-color: $orange;
+		&.yellow {
+			background-color: $yellow;
+			border-color: $yellow;
 
-		&:hover {
-			background-color: white;
-			color: $orange;
+			&:hover {
+				background-color: white;
+				color: $yellow;
+			}
 		}
-	}
 
-	&.purple {
-		border-color: $purple;
-		background-color: $purple;
+		&.orange {
+			background-color: $orange;
+			border-color: $orange;
 
-		&:hover {
-			background-color: white;
-			color: $purple;
+			&:hover {
+				background-color: white;
+				color: $orange;
+			}
+		}
+
+		&.purple {
+			border-color: $purple;
+			background-color: $purple;
+
+			&:hover {
+				background-color: white;
+				color: $purple;
+			}
 		}
 	}
 }

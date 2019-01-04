@@ -32,14 +32,13 @@
 		</div>
 		<div class="spells">
 			<div ng-repeat="(symbol, spell) in ctrl.player.spells"
-				ng-class="spell.color"
+				ng-class="[spell.color, {disabled: ctrl.cooldowns[spell.symbol] > 0}]"
 				ng-click="ctrl.cast_spell(spell)"
 				class="icon spell">
 				<span class="ra"
 					ng-class="spell.symbol"></span>
 				<div class="cooldown"
-					ng-if="spell.cooldown > 0"
-					ng-style="{height: spell.cooldown_percentage + '%'}"></div>
+					ng-style="{height: ctrl.cooldowns[spell.symbol] + '%'}"></div>
 			</div>
 		</div>
 	</div>

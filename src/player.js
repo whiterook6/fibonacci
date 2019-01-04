@@ -39,6 +39,12 @@ class Player {
 		};
 	}
 
+	get_expected_expiry(spell){
+		if (this.expected_expiries.hasOwnProperty(spell.symbol)){
+			return this.expected_expiries[spell.symbol];
+		}
+	}
+
 	// adds (or subtracts, for negative numbers) a given amount of HP, respecting the minimum
 	// and maximum limits.
 	heal(additional_hp){
@@ -63,8 +69,8 @@ class Player {
 		let symbol = spell.symbol;
 
 		if (!this.knows_spell(symbol)){
-			this.expected_expiries[symbol] = Date.now();
 			this.spells[symbol] = spell;
+			this.set_expected_expiry(spell, Date.now());
 		}
 
 		return this;
@@ -82,6 +88,10 @@ class Player {
 		);
 
 		return this;
+	}
+
+	set_expected_expiry(spell, expected_expiry){
+		this.expected_expiries[spell.symbol] = expected_expiry;
 	}
 }
 

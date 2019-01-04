@@ -43,7 +43,27 @@ module.exports = {
 			// unlink the socket and player (for garbage collection)
 			delete player.socket;
 			delete socket.player;
-		}
+		},
+
+		only: (io, players) => {
+			if (players.length > 0){
+				io.emit('players.only', players.map((player) => {
+					return player.symbol;
+				}));
+			}
+		},
+
+		update: (io, players) => {
+			if (players.length > 0){
+				let payload = {};
+				for (let i = players.length - 1; i >= 0; i--) {
+					let affected_player = players[i];
+					payload[affected_player.symbol] = affected_player.get_data();
+				}
+
+				io.emit('players.update', payload);
+			}
+		},
 	},
 
 	// socket-io messages for managing spells
@@ -52,6 +72,15 @@ module.exports = {
 		// teach a new spell to a player
 		teach: (socket, spell) => {
 			socket.emit('spells.learn', spell.symbol);
-		}
+		},
+
+		// tell the player how long is left on a spell's cooldown, in milliseconds
+		cooldown: (socket, player, spell) => {
+			let payload = {
+				symbol: spell.symbol,
+				cooldown: Math.max(0, player.get_expected_expiry(spell) - Date.now())
+			};
+			socket.emit('spells.cooldown', payload);
+		},
 	}
 };

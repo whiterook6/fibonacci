@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack --display-modules --progress",
-    "prod": "./node_modules/.bin/webpack -p --optimize-minimize"
+    "prod": "./node_modules/.bin/webpack -p --optimize-minimize",
+    "server": "node ./src/server.js"
   },
   "devDependencies": {
     "babel-core": "6.13.2",

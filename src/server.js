@@ -10,10 +10,12 @@ var Player = require('./player');
 var Spell = require('./spell');
 
 console.log('Loading data...');
-var spells = require('./spells');
-var all_player_symbols = require('./player_symbols');
-var available_player_symbols = all_player_symbols.slice();
-var players = {};
+var server = {
+	spells: require('./spells'),
+	all_player_symbols: require('./player_symbols'),
+	players: {}
+};
+server.available_player_symbols = server.all_player_symbols.slice();
 
 function pop_random_symbol(symbols){
 	let index = Math.floor(Math.random() * symbols.length);
@@ -24,14 +26,14 @@ function pop_random_symbol(symbols){
 
 function add_new_player(data, socket){
 	let player = new Player(data);
-	players[player.symbol] = player;
+	server.players[player.symbol] = player;
 
 	// send socket-io messages to alert other players and introduce this player
-	protocols.players.add(socket, player, players);
+	protocols.players.add(socket, player, server.players);
 	
-	for (let symbol in spells){
-		if (spells.hasOwnProperty(symbol)){
-			let spell = spells[symbol];
+	for (let symbol in server.spells){
+		if (server.spells.hasOwnProperty(symbol)){
+			let spell = server.spells[symbol];
 
 			protocols.spells.teach(socket, spell);
 			player.learn_spell(spell);
@@ -42,57 +44,57 @@ function add_new_player(data, socket){
 }
 
 io.on('connection', function(socket){
-	if (available_player_symbols.length == 0){
+	if (server.available_player_symbols.length == 0){
 		socket.emit('Room is full.');
 		socket.disconnect();
 		socket = null;
 		return;
 	}
 
-	let symbol = pop_random_symbol(available_player_symbols);
+	let symbol = pop_random_symbol(server.available_player_symbols);
 	let player = add_new_player({symbol: symbol}, socket);
+	protocols.players.only(io, server.players);
 
 	socket.on('spells.cast', (symbol) => {
-		if (!spells.hasOwnProperty(symbol)){
-			return false;
+		if (!server.spells.hasOwnProperty(symbol)){
+			return;
 		}
 
-		let spell = spells[symbol];
+		let spell = server.spells[symbol];
 		if (!spell.can_cast(socket.player)){
-			return false;
+			return;
 		}
 
-		let affected = spell.cast(socket.player, null, players);
-		if (affected.length > 0){
-			let payload = {};
-			for (let i = affected.length - 1; i >= 0; i--) {
-				let affected_player = affected[i];
-				payload[affected_player.symbol] = affected_player.get_data();
-			}
-
-			io.emit('players.update', payload);
-		}
+		let affected = spell.cast(socket.player, null, server.players);
+		protocols.players.update(io, affected);
+		protocols.spells.cooldown(socket, socket.player, spell);
 	});
 
 	socket.on('disconnect', () => {
 		let symbol = socket.player.symbol;
-		available_player_symbols.push(symbol);
-		delete players[symbol];
+		server.available_player_symbols.push(symbol);
+		delete server.players[symbol];
 
 		protocols.players.remove(socket);
 	});
 });
 
 app.use(express.static('public'));
-app.get('/symbols/players', function(_, response) {
+app.get('/symbols/players', (_, response) => {
 	response.send(JSON.stringify(all_player_symbols));
 });
-app.get('/symbols/players/available', function(_, response) {
+app.get('/symbols/players/available', (_, response) => {
 	response.send(JSON.stringify(available_player_symbols));
 });
-app.get('/spells', function(_, response){
+app.get('/players', (_, response) => {
+	let payload = server.players.map((player) => {
+		return player.get_data();
+	});
+	response.send(JSON.stringify(payload));
+})
+app.get('/spells', (_, response) => {
 	response.send(JSON.stringify(spells));
 });
-http.listen(8000, function(){
+http.listen(8000, () => {
 	console.log('Server started.');
 });
