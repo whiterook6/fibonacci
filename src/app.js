@@ -92,7 +92,7 @@ angular
 			ctrl.intervals[spell.symbol] = ctrl.$interval(() => {
 				let now = Date.now(),
 					remaining = Math.max(0, ctrl.player.get_expected_expiry(spell) - now),
-					percentage = (remaining * 100) / (spell.cooldown);
+					percentage = Math.min(100, (remaining * 100) / (spell.cooldown));
 
 				ctrl.cooldowns[spell.symbol] = percentage;
 
@@ -124,6 +124,10 @@ angular
 				return;
 			}
 
-			ctrl.socket.emit('spells.cast', spell.symbol);
+			ctrl.socket.emit('spells.cast', {
+				spell: {
+					symbol: spell.symbol
+				}
+			});
 		};
 	}]);

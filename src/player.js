@@ -11,9 +11,9 @@ class Player {
 			}
 		};
 
-		this.symbol = null;
-		this.spells = {};
-		this.expected_expiries = {};
+		this.symbol = null; // 'ra-beetle'
+		this.spells = {}; // {'ra-bottle': Spell}
+		this.expected_expiries = {}; // {'ra-bottle': Date.now()}
 
 		this.fill(data);
 	}
