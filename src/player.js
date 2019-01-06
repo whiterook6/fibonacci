@@ -45,6 +45,14 @@ class Player {
 		}
 	}
 
+	get_hp(){
+		return this.stats.hp.current;
+	}
+
+	get_mp(){
+		return this.stats.mp.current;
+	}
+
 	// adds (or subtracts, for negative numbers) a given amount of HP, respecting the minimum
 	// and maximum limits.
 	heal(additional_hp){

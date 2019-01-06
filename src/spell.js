@@ -24,11 +24,11 @@ class Spell {
 	}
 
 	can_afford(player){
-		if (this.cost.hp && player.hp <= this.cost.hp){
+		if (this.cost.hp && player.get_hp() <= this.cost.hp){
 			return false;
 		}
 
-		if (this.cost.mp && player.mp < this.cost.mp){
+		if (this.cost.mp && player.get_mp() < this.cost.mp){
 			return false;
 		}
 
@@ -46,7 +46,7 @@ class Spell {
 			return false;
 		}
 
-		if (!this.can_afford(this.cost, player)){
+		if (!this.can_afford(player)){
 			console.log('Cannot cast: cannot afford');
 			return false;
 		}

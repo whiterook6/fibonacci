@@ -105,6 +105,7 @@ $border-size: 2px;
 	color: white;
 	border: 2px solid;
 	cursor: pointer;
+	position: relative;
 
 	.cooldown {
 		position: absolute;
@@ -114,6 +115,17 @@ $border-size: 2px;
 		opacity: 0.5;
 		background-color: black;
 		border-radius: 0 0 2px 2px;
+	}
+
+	&.repeating:after {
+		position: absolute;
+		width: 5px;
+		height: 5px;
+		right: 0;
+		bottom: 0;
+		background-color: white;
+		border-radius: $border-radius;
+		content: ' ';
 	}
 
 	&.disabled {
@@ -131,6 +143,10 @@ $border-size: 2px;
 			&:hover {
 				background-color: white;
 				color: $red;
+
+				&.repeating:after {
+					background-color: $red;
+				}
 			}
 		}
 
@@ -141,6 +157,10 @@ $border-size: 2px;
 			&:hover {
 				background-color: white;
 				color: $blue;
+
+				&.repeating:after {
+					background-color: $blue;
+				}
 			}
 		}
 
@@ -151,6 +171,10 @@ $border-size: 2px;
 			&:hover {
 				background-color: white;
 				color: $green;
+
+				&.repeating:after {
+					background-color: $green;
+				}
 			}
 		}
 
@@ -161,6 +185,10 @@ $border-size: 2px;
 			&:hover {
 				background-color: white;
 				color: $yellow;
+
+				&.repeating:after {
+					background-color: $yellow;
+				}
 			}
 		}
 
@@ -171,6 +199,10 @@ $border-size: 2px;
 			&:hover {
 				background-color: white;
 				color: $orange;
+
+				&.repeating:after {
+					background-color: $orange;
+				}
 			}
 		}
 
@@ -181,6 +213,10 @@ $border-size: 2px;
 			&:hover {
 				background-color: white;
 				color: $purple;
+
+				&.repeating:after {
+					background-color: $purple;
+				}
 			}
 		}
 	}
