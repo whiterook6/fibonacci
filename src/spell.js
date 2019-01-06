@@ -1,11 +1,25 @@
-class Spell {
+let Model = require('./model');
+
+class Spell extends Model {
 	constructor(data){
+		super();
+
 		this.cooldown = 0; // in milliseconds
 		this.cost = {};
 		this.effects = {};
 		this.color = '#2c3e50';
 
 		this.fill(data);
+	}
+
+	get $fillable(){
+		return [
+			'symbol',
+			'cooldown',
+			'cost',
+			'effects',
+			'color'
+		];
 	}
 
 	apply(effects, player){
@@ -94,25 +108,6 @@ class Spell {
 
 		return affected;
 	}
-
-	fill(data){
-		for (var i = Spell.$fillable.length - 1; i >= 0; i--) {
-			var key = Spell.$fillable[i];
-			if (data.hasOwnProperty(key)){
-				this[key] = data[key];
-			}
-		}
-
-		return this;
-	}
 }
-
-Spell.$fillable = [
-	'symbol',
-	'cooldown',
-	'cost',
-	'effects',
-	'color'
-];
 
 module.exports = Spell;

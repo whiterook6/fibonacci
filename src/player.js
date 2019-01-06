@@ -1,5 +1,8 @@
-class Player {
+let Model = require('./model');
+
+class Player extends Model {
 	constructor(data){
+		super();
 		this.stats = {
 			hp: {
 				current: 100,
@@ -18,17 +21,12 @@ class Player {
 		this.fill(data);
 	}
 
-	// adds whatever data is passed into the model, filtering by the $fillable
-	// array (see below).
-	fill(data){
-		for (var i = Player.$fillable.length - 1; i >= 0; i--) {
-			var key = Player.$fillable[i];
-			if (data.hasOwnProperty(key)){
-				this[key] = data[key];
-			}
-		}
-
-		return this;
+	get $fillable(){
+		return [
+			'symbol',
+			'color',
+			'stats',
+		];
 	}
 
 	// creates a packet suitable for sending by socket.
@@ -102,12 +100,5 @@ class Player {
 		this.expected_expiries[spell.symbol] = expected_expiry;
 	}
 }
-
-// used to filter what data can be set on the player.
-Player.$fillable = [
-	'symbol',
-	'color',
-	'stats',
-];
 
 module.exports = Player;

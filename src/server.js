@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http, { // options
-	pingTimeout: 5000,
+	pingTimeout: 10000,
 	pingInterval: 5000,
 	maxHttpBufferSize: 100000,
 });
