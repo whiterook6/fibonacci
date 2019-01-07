@@ -51,17 +51,14 @@ class Spell extends Model {
 
 	can_cast(player){
 		if (!player.knows_spell(this)){
-			console.log('Cannot cast: symbol missing');
 			return false;
 		}
 
 		if (player.get_expected_expiry(this) > Date.now()){
-			console.log('Cannot cast: symbol expired');
 			return false;
 		}
 
 		if (!this.can_afford(player)){
-			console.log('Cannot cast: cannot afford');
 			return false;
 		}
 

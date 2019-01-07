@@ -17,7 +17,7 @@ angular
 			link: function(scope, element, attributes){
 				let timeout = null;
 				element.on('mousedown', (event) => {
-					if (timeout == null){
+					if (timeout != null){
 						$timeout.cancel(timeout);
 					}
 
@@ -29,6 +29,13 @@ angular
 				element.on('mouseup', (event) => {
 					if (timeout != null){
 						$timeout.cancel(timeout);
+						timeout = null;
+					}
+				});
+				element.on('mouseout', (event) => {
+					if (timeout != null){
+						$timeout.cancel(timeout);
+						timeout = null;
 					}
 				});
 			}
@@ -92,6 +99,7 @@ angular
 					ctrl.forget_player(player.symbol);
 				}
 			});
+			ctrl.$scope.$apply();
 		});
 
 		ctrl.socket.on('spells.learn', (symbol) => {
