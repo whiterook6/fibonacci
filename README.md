@@ -24,6 +24,7 @@ Definitions:
 	},
 	// ...
 }
+```
 
 #### Updating Players: `players.update`
 
